@@ -1,10 +1,13 @@
 package com.design.pattern.builder;
 
+import com.google.common.base.Strings;
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public final class Email {
-    private Set<String> from;
+    private String from;
     private Set<String> to;
     private Set<String> cc;
     private Set<String> bcc;
@@ -38,35 +41,45 @@ public final class Email {
     interface EmailFrom {
         EmailTo setFrom(String from);
     }
+
     //Interface to Set To
-    interface  EmailTo {
+    interface EmailTo {
         EmailSubject setTo(String to);
     }
+
     //Interface to Set subject
-    interface  EmailSubject {
+    interface EmailSubject {
         EmailSubject setTo(String to);
+
         EmailContent setSubject(String subject);
     }
+
     // Interface to set Content
-    interface  EmailContent {
+    interface EmailContent {
         EmailCreator setContent(String content);
     }
+
     // Final Email Creator Class
     interface EmailCreator {
         EmailCreator setBCC(String bcc);
+
         EmailCreator setCC(String cc);
+
         Email build();
     }
 
     public static class EmailBuilder implements EmailFrom, EmailTo, EmailSubject, EmailContent, EmailCreator {
-        private Set<String> from = new LinkedHashSet<String>();
-        private Set<String> to = new LinkedHashSet<String>();;
-        private Set<String> cc = new LinkedHashSet<String>();;
-        private Set<String> bcc = new LinkedHashSet<String>();;
+        private String from;
+        private Set<String> to = new LinkedHashSet<String>();
+        ;
+        private Set<String> cc = new LinkedHashSet<String>();
+        ;
+        private Set<String> bcc = new LinkedHashSet<String>();
+        ;
         private String subject;
         private String content;
 
-        public EmailBuilder(){
+        public EmailBuilder() {
         }
 
         public static EmailBuilder getInstance() {
@@ -74,12 +87,14 @@ public final class Email {
         }
 
         public EmailTo setFrom(String from) {
-            this.from.add(from);
+            this.from = from;
             return this;
         }
 
         public EmailSubject setTo(String to) {
-            this.to.add(to);
+            if(!Strings.isNullOrEmpty(to)) {
+                this.to.add(to);
+            }
             return this;
         }
 
@@ -94,16 +109,26 @@ public final class Email {
         }
 
         public EmailCreator setBCC(String bcc) {
-            this.bcc.add(bcc);
+            if(!Strings.isNullOrEmpty(bcc)) {
+                this.bcc.add(bcc);
+            }
             return this;
         }
 
         public EmailCreator setCC(String cc) {
-            this.cc.add(cc);
+            if(!Strings.isNullOrEmpty(cc)) {
+                this.cc.add(cc);
+            }
             return this;
         }
 
         public Email build() {
+            if (Strings.isNullOrEmpty(this.from)) {
+                throw new IllegalArgumentException("Sender Address cannot be null or empty.");
+            }
+            if (CollectionUtils.isEmpty(to) && CollectionUtils.isEmpty(cc) && CollectionUtils.isEmpty(bcc)) {
+                throw new IllegalArgumentException("Recipient Address cannot be null or empty.");
+            }
             return new Email(this);
         }
     }

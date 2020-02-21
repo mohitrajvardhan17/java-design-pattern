@@ -17,7 +17,7 @@ public class EmailTest {
                 .setContent("I am back.")
                 .build();
         assertEquals("", "Email{" +
-                "from=[yoda@gmail.com], " +
+                "from=yoda@gmail.com, " +
                 "to=[darkside@gmail.com], " +
                 "cc=[], " +
                 "bcc=[], " +
@@ -35,10 +35,33 @@ public class EmailTest {
                 .setContent("I am back.")
                 .build();
         assertEquals("", "Email{" +
-                "from=[yoda@gmail.com], " +
+                "from=yoda@gmail.com, " +
                 "to=[skywalker@gmail.com, darkside@gmail.com], " +
-                "cc=[], bcc=[], " +
+                "cc=[], " +
+                "bcc=[], " +
                 "subject='The Mandalorian', " +
                 "content='I am back.'}", email.toString());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildEmailWithNoRecipientShouldReturnError() {
+        Email.EmailBuilder.getInstance()
+                .setFrom("yoda@gmail.com")
+                .setTo(null)
+                .setSubject("The Mandalorian")
+                .setContent("I am back.")
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildEmailWithNoSenderShouldReturnError() {
+        Email email = Email.EmailBuilder.getInstance()
+                .setFrom(null)
+                .setTo("darkside@gmail.com")
+                .setSubject("The Mandalorian")
+                .setContent("I am back.")
+                .build();
+    }
+
+
 }
