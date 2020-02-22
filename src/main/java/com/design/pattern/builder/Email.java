@@ -14,6 +14,10 @@ public final class Email {
     private String subject;
     private String content;
 
+    private Email() {
+        throw new UnsupportedOperationException("Cannot use Default constructor for initialization");
+    }
+
     private Email(EmailBuilder emailBuilder) {
         //Step 1: Make the public constructor private and input type as Builder
         this.from = emailBuilder.from;
