@@ -1,4 +1,4 @@
-package com.design.pattern.builder.lambok;
+package com.design.pattern.builder.lombok;
 
 import com.google.common.base.Strings;
 import lombok.Builder;
