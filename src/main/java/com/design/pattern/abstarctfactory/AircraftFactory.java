@@ -259,18 +259,10 @@ enum Mig35AbstractFactory implements AircraftAbstractFactory {
     }
 }
 
-interface AircraftFactory {
+public interface AircraftFactory {
     static Aircraft getAircraft(AircraftAbstractFactory aircraftAbstractFactory) {
         System.out.println("Getting Aircraft using AircraftFactory!!!");
         return aircraftAbstractFactory.createAircraft();
     }
 }
 
-
-public class AbstractFactory {
-    public static void main(String[] args) {
-        Aircraft aircraftF16 = AircraftFactory.getAircraft(F16AbstractFactory.F16);
-        Aircraft aircraftF16A = AircraftFactory.getAircraft(F16AbstractFactory.F16A);
-        Aircraft aircraftMig35 = AircraftFactory.getAircraft(Mig35AbstractFactory.MIG35);
-    }
-}
